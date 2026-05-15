@@ -1,0 +1,5 @@
+node_modules/
+public/images/*
+!public/images/.gitkeep
+data.json
+.DS_Store

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="An infinite canvas of sketches.">
+  <title>Sketchboard</title>
+
+  <!-- Google AdSense — replace YOUR_PUBLISHER_ID and slot IDs before going live -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID"
+          crossorigin="anonymous"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Fraunces:ital,opsz,wght@1,9..144,300&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:  #e8e2d4;
+      --dot: rgba(100, 88, 68, .18);
+      --ui:  rgba(18, 14, 8, .9);
+    }
+
+    html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); }
+
+    /* ─── AD TOP ─── */
+    #ad-top {
+      position: fixed; top: 0; left: 0; right: 0; height: 90px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg); border-bottom: 1px solid rgba(100,88,68,.2);
+      z-index: 400;
+    }
+
+    /* ─── CANVAS ─── */
+    #cv {
+      position: fixed; top: 90px; left: 0; right: 0; bottom: 0;
+      overflow: hidden; background: var(--bg);
+      background-image: radial-gradient(circle, var(--dot) 1px, transparent 1px);
+      background-size: 28px 28px;
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 24 24'%3E%3Cpath fill='%2312100a' d='M9 3a1 1 0 0 0-1 1v7H6.5A1.5 1.5 0 0 0 5 12.5v.5a7 7 0 0 0 7 7h1a7 7 0 0 0 7-7v-3a1.5 1.5 0 0 0-3 0v-1a1.5 1.5 0 0 0-3 0v-.5A1.5 1.5 0 0 0 12.5 7H12V4a1 1 0 0 0-1-1H9Z'/%3E%3C/svg%3E") 5 2, grab;
+    }
+    #cv.pan { cursor: grabbing; }
+
+    #world {
+      position: absolute; top: 0; left: 0; width: 0; height: 0;
+      transform-origin: 0 0;
+    }
+
+    /* ─── SKETCHES (public — no hover, no controls) ─── */
+    .sk {
+      position: absolute;
+      user-select: none;
+      pointer-events: none; /* viewer can't interact with images */
+    }
+    .sk img {
+      display: block;
+      width: 100%; height: 100%;
+      pointer-events: none;
+    }
+
+    /* ─── EMPTY ─── */
+    #empty {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 14px; pointer-events: none;
+    }
+    #empty .ico { font-size: 4rem; opacity: .12; }
+    #empty h2 {
+      font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
+      font-size: 2rem; color: #12100a; opacity: .18;
+    }
+    #empty p {
+      font-family: 'Caveat', cursive;
+      font-size: 1.1rem; color: #12100a; opacity: .18;
+    }
+
+    /* ─── LOGO ─── */
+    #logo {
+      position: fixed; top: 100px; left: 16px;
+      font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
+      font-size: 1.1rem; color: #12100a; opacity: .25;
+      pointer-events: none; z-index: 100; letter-spacing: -.01em;
+    }
+
+    /* ─── ZOOM CONTROL ─── */
+    #tb {
+      position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 2px; padding: 0 10px; height: 42px;
+      background: var(--ui); backdrop-filter: blur(20px);
+      border-radius: 100px; z-index: 400;
+      box-shadow: 0 4px 24px rgba(0,0,0,.3);
+    }
+    .tbb {
+      width: 34px; height: 34px; border: none; background: transparent;
+      color: rgba(255,255,255,.6); border-radius: 50%; font-size: 1.05rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background .12s, color .12s;
+    }
+    .tbb:hover { background: rgba(255,255,255,.12); color: #fff; }
+
+    /* ─── AD CORNER ─── */
+    #ad-corner { position: fixed; right: 12px; bottom: 64px; z-index: 200; }
+
+    @media (max-width: 800px) {
+      #ad-top    { display: none; }
+      #cv        { top: 0; }
+      #ad-corner { display: none; }
+      #logo      { top: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- AdSense: Leaderboard 728×90 -->
+<div id="ad-top">
+  <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px"
+       data-ad-client="ca-pub-YOUR_PUBLISHER_ID" data-ad-slot="YOUR_SLOT_1"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<span id="logo">sketchboard</span>
+
+<div id="cv">
+  <div id="world"></div>
+  <div id="empty">
+    <div class="ico">✏️</div>
+    <h2>Canvas is empty</h2>
+    <p>Check back soon</p>
+  </div>
+</div>
+
+<!-- AdSense: Rectangle 300×250 -->
+<div id="ad-corner">
+  <ins class="adsbygoogle" style="display:block;width:300px;height:250px"
+       data-ad-client="ca-pub-YOUR_PUBLISHER_ID" data-ad-slot="YOUR_SLOT_2"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<div id="tb">
+  <button class="tbb" id="btn-out">−</button>
+  <button class="tbb" id="btn-in">+</button>
+  <button class="tbb" id="btn-fit" style="font-size:.8rem">⌂</button>
+</div>
+
+<script>
+const cv    = document.getElementById('cv');
+const world = document.getElementById('world');
+const empty = document.getElementById('empty');
+
+let ox = 0, oy = 0, sc = 1;
+let sketches = [];
+
+// ─────────────────────────────────────────
+//  Transform
+// ─────────────────────────────────────────
+function applyT() {
+  world.style.transform = `translate(${ox}px,${oy}px) scale(${sc})`;
+  const dot = Math.max(5, 28 * sc);
+  cv.style.backgroundSize     = `${dot}px ${dot}px`;
+  cv.style.backgroundPosition = `${((ox % dot) + dot) % dot}px ${((oy % dot) + dot) % dot}px`;
+  cull();
+}
+
+function fitAll() {
+  if (!sketches.length) { ox = cv.clientWidth / 2; oy = cv.clientHeight / 2; sc = 1; applyT(); return; }
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  sketches.forEach(s => {
+    x0 = Math.min(x0, s.x);          y0 = Math.min(y0, s.y);
+    x1 = Math.max(x1, s.x + s.w);    y1 = Math.max(y1, s.y + s.h);
+  });
+  const mg = 40;
+  sc = Math.min((cv.clientWidth - mg * 2) / (x1 - x0), (cv.clientHeight - mg * 2) / (y1 - y0), 2);
+  ox = cv.clientWidth  / 2 - (x0 + (x1 - x0) / 2) * sc;
+  oy = cv.clientHeight / 2 - (y0 + (y1 - y0) / 2) * sc;
+  applyT();
+}
+
+// ─────────────────────────────────────────
+//  Pan — mouse
+// ─────────────────────────────────────────
+let pan = false, px0 = 0, py0 = 0;
+cv.addEventListener('mousedown', e => {
+  pan = true; px0 = e.clientX - ox; py0 = e.clientY - oy;
+  cv.classList.add('pan'); e.preventDefault();
+});
+document.addEventListener('mousemove', e => {
+  if (!pan) return;
+  ox = e.clientX - px0; oy = e.clientY - py0; applyT();
+});
+document.addEventListener('mouseup', () => { pan = false; cv.classList.remove('pan'); });
+
+// ─────────────────────────────────────────
+//  Pan + pinch — touch
+// ─────────────────────────────────────────
+let t0x, t0y, pd = 0;
+cv.addEventListener('touchstart', e => {
+  if (e.touches.length === 1) { t0x = e.touches[0].clientX - ox; t0y = e.touches[0].clientY - oy; }
+  else if (e.touches.length === 2) {
+    pd = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+  }
+}, { passive: true });
+
+cv.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (e.touches.length === 1) { ox = e.touches[0].clientX - t0x; oy = e.touches[0].clientY - t0y; }
+  else if (e.touches.length === 2 && pd) {
+    const d  = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    const mx = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+    const my = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+    const f  = d / pd;
+    ox = mx - (mx - ox) * f; oy = my - (my - oy) * f;
+    sc = Math.min(Math.max(sc * f, .04), 12); pd = d;
+  }
+  applyT();
+}, { passive: false });
+
+// ─────────────────────────────────────────
+//  Wheel zoom
+// ─────────────────────────────────────────
+cv.addEventListener('wheel', e => {
+  e.preventDefault();
+  const f  = e.deltaY < 0 ? 1.1 : 1 / 1.1;
+  const r  = cv.getBoundingClientRect();
+  const mx = e.clientX - r.left, my = e.clientY - r.top;
+  ox = mx - (mx - ox) * f; oy = my - (my - oy) * f;
+  sc = Math.min(Math.max(sc * f, .04), 12); applyT();
+}, { passive: false });
+
+function zc(f) {
+  const mx = cv.clientWidth / 2, my = cv.clientHeight / 2;
+  ox = mx - (mx - ox) * f; oy = my - (my - oy) * f;
+  sc = Math.min(Math.max(sc * f, .04), 12); applyT();
+}
+document.getElementById('btn-in' ).addEventListener('click', () => zc(1.25));
+document.getElementById('btn-out').addEventListener('click', () => zc(1 / 1.25));
+document.getElementById('btn-fit').addEventListener('click', fitAll);
+
+// ─────────────────────────────────────────
+//  Virtualized render — only mount sketches near the viewport.
+//  Saves bandwidth: browser never requests off-screen images.
+// ─────────────────────────────────────────
+const mounted = new Map(); // id → element
+
+function makeEl(sk) {
+  const el = document.createElement('div');
+  el.className = 'sk';
+  el.style.cssText = `left:${sk.x}px; top:${sk.y}px; width:${sk.w}px; height:${sk.h}px; z-index:${sk.z || 0};`;
+  const img = document.createElement('img');
+  img.src = 'images/' + sk.file;
+  img.alt = sk.title || '';
+  img.loading  = 'lazy';     // browser-level deferral as a second safety net
+  img.decoding = 'async';
+  img.draggable = false;
+  el.appendChild(img);
+  return el;
+}
+
+// Test whether a sketch's box intersects the visible viewport (world coords).
+// Overscan = render slightly outside the viewport so images are ready before they scroll in.
+function visible(sk, vx0, vy0, vx1, vy1) {
+  return sk.x + sk.w >= vx0 && sk.x <= vx1 &&
+         sk.y + sk.h >= vy0 && sk.y <= vy1;
+}
+
+function cull() {
+  if (!sketches.length) return;
+
+  // Convert viewport rect (screen px) to world coords, add an overscan buffer.
+  const overscan = 400; // px of world space beyond each edge
+  const vx0 = (-ox) / sc - overscan;
+  const vy0 = (-oy) / sc - overscan;
+  const vx1 = (cv.clientWidth  - ox) / sc + overscan;
+  const vy1 = (cv.clientHeight - oy) / sc + overscan;
+
+  // Mount any visible sketches that aren't in the DOM yet
+  sketches.forEach(sk => {
+    const inView   = visible(sk, vx0, vy0, vx1, vy1);
+    const isMounted = mounted.has(sk.id);
+    if (inView && !isMounted) {
+      const el = makeEl(sk);
+      mounted.set(sk.id, el);
+      world.appendChild(el);
+    } else if (!inView && isMounted) {
+      // Remove the element entirely so the browser drops the image from memory
+      mounted.get(sk.id).remove();
+      mounted.delete(sk.id);
+    }
+  });
+}
+
+// Full reset — called when the sketches list itself changes
+function render() {
+  mounted.forEach(el => el.remove());
+  mounted.clear();
+  empty.style.display = sketches.length ? 'none' : 'flex';
+  cull();
+}
+
+// ─────────────────────────────────────────
+//  Load from server
+// ─────────────────────────────────────────
+async function loadData() {
+  try {
+    const res = await fetch('/api/data', { cache: 'no-store' });
+    const d   = await res.json();
+    sketches  = d.sketches || [];
+    render();
+    fitAll();
+  } catch (e) {
+    console.error('Could not load sketches:', e);
+  }
+}
+
+loadData();
+
+// Poll for updates every 30 s so the public canvas stays fresh
+setInterval(loadData, 30000);
+</script>
+</body>
+</html>
