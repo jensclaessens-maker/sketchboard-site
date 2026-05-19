@@ -24,6 +24,23 @@
 
     html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); }
 
+    /* ─── HEADER FADE OVERLAY ─── */
+    /* A soft band of the page background fading downward, so the title and
+       top-right links stay readable when sketches scroll behind them. */
+    #header-fade {
+      position: fixed; top: 90px; left: 0; right: 0;
+      height: 110px;
+      background: linear-gradient(to bottom,
+        rgba(250, 241, 224, .5) 0%,
+        rgba(250, 241, 224, .5) 35%,
+        rgba(250, 241, 224, 0) 100%);
+      pointer-events: none;
+      z-index: 90;   /* under #logo (100) and #header-links (100), above the canvas */
+    }
+    @media (max-width: 800px) {
+      #header-fade { top: 0; height: 70px; }
+    }
+
     /* ─── AD TOP ─── */
     #ad-top {
       position: fixed; top: 0; left: 0; right: 0; height: 90px;
@@ -83,11 +100,6 @@
       white-space: nowrap;
       max-width: calc(100vw - 32px);
       overflow: hidden; text-overflow: ellipsis;
-      /* Frosted-glass background so sketches behind stay visible but the text is readable */
-      padding: 4px 12px; border-radius: 10px;
-      background: rgba(250, 241, 224, .5);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
     }
     @media (max-width: 800px) {
       #logo { top: 14px; font-size: 1.4rem; }
@@ -113,7 +125,7 @@
     /* ─── HEADER LINKS (top-right) ─── */
     #header-links {
       position: fixed; top: 100px; right: 18px;
-      display: flex; align-items: center; gap: 10px;
+      display: flex; align-items: center; gap: 16px;
       font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
       font-size: 1.4rem;
       z-index: 100;
@@ -121,28 +133,19 @@
     #header-links a {
       color: #000; text-decoration: none;
       display: inline-flex; align-items: center;
-      padding: 6px 12px; border-radius: 999px;
-      background: rgba(250, 241, 224, .5);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      transition: opacity .15s, background .15s;
+      transition: opacity .15s;
     }
-    #header-links a:hover {
-      opacity: .85;
-      background: rgba(250, 241, 224, .75);
-    }
+    #header-links a:hover { opacity: .55; }
     #header-links svg {
       width: 26px; height: 26px;
       display: block;
     }
     @media (max-width: 800px) {
-      #header-links { top: 14px; font-size: 1rem; right: 12px; gap: 8px; }
-      #header-links a { padding: 5px 10px; }
+      #header-links { top: 14px; font-size: 1rem; right: 12px; gap: 14px; }
       #header-links svg { width: 22px; height: 22px; }
     }
     @media (max-width: 500px) {
-      #header-links { font-size: .9rem; gap: 6px; }
-      #header-links a { padding: 4px 8px; }
+      #header-links { font-size: .9rem; gap: 12px; }
       #header-links svg { width: 20px; height: 20px; }
     }
 
@@ -180,6 +183,8 @@
        data-ad-client="ca-pub-9316815166015110" data-ad-slot="YOUR_SLOT_TOP"></ins>
   <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </div>
+
+<div id="header-fade"></div>
 
 <span id="logo">The Endless Sketchbookery of Jens Claessens</span>
 
