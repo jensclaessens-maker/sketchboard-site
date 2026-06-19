@@ -1,0 +1,17 @@
+/* Self-hosted fonts — no third-party requests (no Google Fonts).
+   Subset to Latin from the upstream OFL families; kept variable so every
+   weight in use works from a single file. Cormorant is declared in page.tsx. */
+@font-face {
+  font-family: 'Fraunces';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/fraunces-italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Caveat';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/caveat.woff2') format('woff2');
+}

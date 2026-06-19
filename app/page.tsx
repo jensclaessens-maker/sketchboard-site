@@ -97,23 +97,6 @@ const CSS = `    @font-face {
       #logo { top: 8px; font-size: 1.4rem; height: auto; line-height: 1.45; }
     }
 
-    /* ─── PAGE LINKS (bottom-left, discreet) ─── */
-    #page-links {
-      position: fixed; left: 14px; bottom: 14px;
-      display: flex; gap: 14px;
-      font-family: 'Inter', system-ui, sans-serif;
-      font-size: .82rem;
-      z-index: 100;
-    }
-    #page-links a {
-      color: #12100a; opacity: .35; text-decoration: none;
-      transition: opacity .15s;
-    }
-    #page-links a:hover { opacity: .85; }
-    @media (max-width: 600px) {
-      #page-links { font-size: .75rem; left: 10px; bottom: 8px; }
-    }
-
     /* ─── HEADER LINKS (top-right) ─── */
     #header-links {
       position: fixed; top: 16px; right: 18px; height: 48px;

@@ -96,17 +96,17 @@ const BODY = `<header>
 
   <h2>Cookies and similar technologies</h2>
   <p>This site uses a small amount of browser storage to remember your zoom and pan position during a visit. This data stays on your device and is not transmitted to the server.</p>
-  <p>Third-party services we use (described below) may set their own cookies. You can disable cookies in your browser settings; the canvas will continue to work normally.</p>
+  <p>This site uses no advertising, analytics, or other third-party services, so no third-party cookies are set. You can disable cookies in your browser settings; the canvas will continue to work normally.</p>
 
   <h2>Fonts</h2>
-  <p>The site loads fonts from Google Fonts. When this happens, your browser contacts Google's servers, which may log your IP address. Google's privacy policy is available at <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a>.</p>
+  <p>All fonts are served directly from this site. No third-party font service (such as Google Fonts) is used, so your browser never contacts an outside server to display the page.</p>
 
   <h2>Children</h2>
   <p>This site is not directed at children under 13. We do not knowingly collect personal information from children. If you believe a child has provided personal information through the site, please contact us so we can remove it.</p>
 
   <h2>Your rights</h2>
   <p>If you are in the European Economic Area, the United Kingdom, or another jurisdiction with a comparable data protection law, you have rights regarding personal data we hold about you, including the right to access, correct, or delete that data, and the right to lodge a complaint with your local supervisory authority.</p>
-  <p>Because this site does not collect personal information directly, requests of this nature would typically need to go to the relevant third party (Google Fonts). For requests relating to anything held by our server, please contact us at the address below.</p>
+  <p>Because this site does not collect personal information directly and uses no third-party services, there is little or no such data held elsewhere; for anything held by our server, please contact us at the address below.</p>
 
   <h2>Changes to this policy</h2>
   <p>This policy may be updated from time to time to reflect changes in the site, in the services we use, or in applicable law. The "Last updated" date above will reflect any revisions. Continued use of the site after changes means you accept the updated policy.</p>
