@@ -170,6 +170,7 @@ const BODY = `<div id="header-fade"></div>
 <span id="logo">The Endless Sketchbookery of Jens Claessens</span>
 
 <nav id="header-links">
+  <a href="https://thedrawingchallenge.com" target="_blank" rel="noopener">The Drawing Challenge</a>
   <a href="https://jensclaessens.gumroad.com/" target="_blank" rel="noopener">Shop</a>
   <a href="https://ko-fi.com/jensclaessens/shop" target="_blank" rel="noopener">Mentorships</a>
   <a href="mailto:jens.claessens@gmail.com">Contact</a>
