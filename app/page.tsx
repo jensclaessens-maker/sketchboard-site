@@ -44,13 +44,14 @@ const CSS = `    @font-face {
     #cv {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       overflow: hidden; background: var(--bg);
-      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffffff' stroke='%2312100a' stroke-width='1.5' stroke-linejoin='round' d='M9 3a1 1 0 0 0-1 1v7H6.5A1.5 1.5 0 0 0 5 12.5v.5a7 7 0 0 0 7 7h1a7 7 0 0 0 7-7v-3a1.5 1.5 0 0 0-3 0v-1a1.5 1.5 0 0 0-3 0v-.5A1.5 1.5 0 0 0 12.5 7H12V4a1 1 0 0 0-1-1H9Z'/%3E%3C/svg%3E") 5 2, grab;
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%2312100a' stroke='%23ffffff' stroke-width='2' stroke-linejoin='round' d='M9 3a1 1 0 0 0-1 1v7H6.5A1.5 1.5 0 0 0 5 12.5v.5a7 7 0 0 0 7 7h1a7 7 0 0 0 7-7v-3a1.5 1.5 0 0 0-3 0v-1a1.5 1.5 0 0 0-3 0v-.5A1.5 1.5 0 0 0 12.5 7H12V4a1 1 0 0 0-1-1H9Z'/%3E%3C/svg%3E") 5 2, grab;
     }
     #cv.pan { cursor: grabbing; }
 
     #world {
       position: absolute; top: 0; left: 0; width: 0; height: 0;
       transform-origin: 0 0;
+      will-change: transform;
     }
 
     /* ─── SKETCHES (public — no hover, no controls) ─── */
@@ -93,7 +94,7 @@ const CSS = `    @font-face {
       overflow: hidden; text-overflow: ellipsis;
     }
     @media (max-width: 800px) {
-      #logo { top: 12px; font-size: 1.4rem; height: auto; line-height: 1.1; }
+      #logo { top: 8px; font-size: 1.4rem; height: auto; line-height: 1.45; }
     }
 
     /* ─── PAGE LINKS (bottom-left, discreet) ─── */
@@ -131,6 +132,9 @@ const CSS = `    @font-face {
       width: 23px; height: 23px;
       display: block;
     }
+    /* Hamburger hidden on desktop; the mobile @media below reveals it (must come
+       BEFORE the @media so the media rule's display:flex wins on mobile). */
+    #menu-btn { display: none; }
     @media (max-width: 800px) {
       /* Links collapse into the #menu-btn hamburger; shown only when opened */
       #header-links { display: none; }
@@ -175,9 +179,6 @@ const CSS = `    @font-face {
     .tbb:hover { background: rgba(255,255,255,.12); color: #fff; }
     .tbb:disabled { opacity: .3; cursor: default; }
     .tbb:disabled:hover { background: transparent; color: rgba(255,255,255,.6); }
-
-    /* Mobile hamburger (its own bubble beside the zoom toolbar; hidden on desktop) */
-    #menu-btn { display: none; }
 
   `;
 

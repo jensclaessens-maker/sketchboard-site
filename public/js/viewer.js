@@ -12,10 +12,14 @@ let sketches = [];
 // ─────────────────────────────────────────
 //  Transform
 // ─────────────────────────────────────────
+let _rafQueued = false;
 function applyT() {
   world.style.transform = `translate(${ox}px,${oy}px) scale(${sc})`;
-  cull();
-  syncZoomBtns();
+  // Coalesce the heavier work (mount/unmount + button sync) to one run per
+  // animation frame so rapid pan/zoom stays smooth — especially on mobile.
+  if (_rafQueued) return;
+  _rafQueued = true;
+  requestAnimationFrame(() => { _rafQueued = false; cull(); syncZoomBtns(); });
 }
 
 function fitAll() {
@@ -228,7 +232,8 @@ function render() {
 const LANDING_ZOOM = 0.4; // matches one "−" press from the previous 0.5 landing
 // Minimum zoom: 3 "−" ticks below the landing zoom (0.4 × 0.8³ ≈ 0.205) — one
 // step further out than the original limit, but still not the whole collection.
-const MIN_ZOOM = LANDING_ZOOM * (1 / 1.25) * (1 / 1.25) * (1 / 1.25);
+// Mobile gets two extra zoom-out steps (5 ticks below the landing zoom vs 3).
+const MIN_ZOOM = LANDING_ZOOM * Math.pow(1 / 1.25, window.innerWidth <= 800 ? 5 : 3);
 const MAX_ZOOM = 12;
 function landRandom() {
   if (!sketches.length) {
@@ -247,11 +252,18 @@ function landRandom() {
 //  Load from server
 // ─────────────────────────────────────────
 let firstLoad = true;
+let _dataSig  = '';
 async function loadData() {
   try {
     const res = await fetch('/api/data', { cache: 'no-store' });
     const d   = await res.json();
-    sketches  = d.sketches || [];
+    const next = d.sketches || [];
+    // Skip the re-render when the polled data is unchanged — avoids a periodic
+    // full re-mount (felt as a hitch, most on mobile).
+    const sig = next.map(s => s.id + ':' + s.x + ',' + s.y + ',' + s.w + ',' + s.h + ',' + s.z).join('|');
+    if (sig === _dataSig && !firstLoad) return;
+    _dataSig  = sig;
+    sketches  = next;
     render();
     if (firstLoad) {
       landRandom();   // pick a random sketch, centre on it at 1:1
