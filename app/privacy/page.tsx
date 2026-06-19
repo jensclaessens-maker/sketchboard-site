@@ -138,12 +138,6 @@ export default function Page() {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
-      <Script
-        async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9316815166015110"
-        crossOrigin="anonymous"
-        strategy="afterInteractive"
-      />
       <div dangerouslySetInnerHTML={{ __html: BODY }} />
       <Script id="year" strategy="afterInteractive">{`document.getElementById('year').textContent = new Date().getFullYear();`}</Script>
     </>

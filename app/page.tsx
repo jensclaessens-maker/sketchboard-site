@@ -37,7 +37,7 @@ const CSS = `    @font-face {
       z-index: 90;   /* under #logo (100) and #header-links (100), above the canvas */
     }
     @media (max-width: 800px) {
-      #header-fade { top: 0; height: 70px; }
+      #header-fade { top: 0; height: 88px; }
     }
 
     /* ─── CANVAS ─── */
@@ -93,7 +93,7 @@ const CSS = `    @font-face {
       overflow: hidden; text-overflow: ellipsis;
     }
     @media (max-width: 800px) {
-      #logo { top: 14px; font-size: 1.4rem; }
+      #logo { top: 12px; font-size: 1.4rem; height: auto; line-height: 1.1; }
     }
 
     /* ─── PAGE LINKS (bottom-left, discreet) ─── */
@@ -132,7 +132,7 @@ const CSS = `    @font-face {
       display: block;
     }
     @media (max-width: 800px) {
-      #header-links { top: 14px; font-size: 1rem; right: 12px; gap: 14px; }
+      #header-links { top: 44px; left: 14px; right: auto; height: auto; font-size: 1rem; gap: 16px; }
       #header-links svg { width: 22px; height: 22px; }
     }
     @media (max-width: 500px) {
