@@ -161,10 +161,6 @@ file is for your machine only and is never uploaded.
   site's images/positions are not carried over automatically — if you have a
   live old version with sketches you want to keep, tell Claude and it can write a
   one-time import.
-- **Google AdSense:** the publisher id (`ca-pub-9316815166015110`) is already in
-  place. Once AdSense approves real ad slots, search the project for
-  `YOUR_SLOT_TOP` and `YOUR_SLOT_CORNER` (in `app/page.tsx`) and replace them
-  with your real slot ids.
 - **Cost:** within the free allowances this is **$0/month**. The limit you'd hit
   first is Workers' **100,000 requests/day** — every page view, API call, and
   image counts as one. Two things keep that low: the viewer only loads images as

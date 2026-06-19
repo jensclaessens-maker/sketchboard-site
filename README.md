@@ -77,10 +77,3 @@ npm run deploy
   immutable cache. **Positions/titles** are rows in D1. **Login** issues a signed
   token (no server-side session storage).
 - Images display at their **actual pixel size** in world space.
-
-## AdSense
-
-The publisher id (`ca-pub-9316815166015110`) is wired into `app/page.tsx`,
-`app/about/page.tsx`, and `app/privacy/page.tsx`. Replace the `YOUR_SLOT_TOP` /
-`YOUR_SLOT_CORNER` placeholders with real slot ids once AdSense approves them.
-The admin page deliberately has no ads.

@@ -44,7 +44,7 @@ const CSS = `    @font-face {
     #cv {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       overflow: hidden; background: var(--bg);
-      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%2312100a' stroke='%23ffffff' stroke-width='2' stroke-linejoin='round' d='M9 3a1 1 0 0 0-1 1v7H6.5A1.5 1.5 0 0 0 5 12.5v.5a7 7 0 0 0 7 7h1a7 7 0 0 0 7-7v-3a1.5 1.5 0 0 0-3 0v-1a1.5 1.5 0 0 0-3 0v-.5A1.5 1.5 0 0 0 12.5 7H12V4a1 1 0 0 0-1-1H9Z'/%3E%3C/svg%3E") 5 2, grab;
+      cursor: grab;
     }
     #cv.pan { cursor: grabbing; }
 

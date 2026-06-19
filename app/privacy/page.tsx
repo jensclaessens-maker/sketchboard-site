@@ -98,16 +98,6 @@ const BODY = `<header>
   <p>This site uses a small amount of browser storage to remember your zoom and pan position during a visit. This data stays on your device and is not transmitted to the server.</p>
   <p>Third-party services we use (described below) may set their own cookies. You can disable cookies in your browser settings; the canvas will continue to work normally.</p>
 
-  <h2>Advertising — Google AdSense</h2>
-  <p>This site displays advertising provided by Google AdSense to help cover the cost of hosting. Through AdSense, Google and its partners may:</p>
-  <ul>
-    <li>Use cookies to serve ads based on your prior visits to this site or other sites.</li>
-    <li>Use information about your visit (excluding name, address, email, or phone number) to provide advertisements about goods and services you may find interesting.</li>
-    <li>Use anonymous identifiers to measure ad performance.</li>
-  </ul>
-  <p>You can opt out of personalised advertising at any time by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google's Ads Settings</a>. For more information about how Google handles data on partner sites, see <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">How Google uses information from sites or apps that use our services</a>.</p>
-  <p>You can also opt out of third-party vendor use of cookies for personalised advertising by visiting <a href="https://www.aboutads.info/" target="_blank" rel="noopener">aboutads.info</a> (US) or <a href="https://www.youronlinechoices.eu/" target="_blank" rel="noopener">youronlinechoices.eu</a> (EU).</p>
-
   <h2>Fonts</h2>
   <p>The site loads fonts from Google Fonts. When this happens, your browser contacts Google's servers, which may log your IP address. Google's privacy policy is available at <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a>.</p>
 
@@ -116,7 +106,7 @@ const BODY = `<header>
 
   <h2>Your rights</h2>
   <p>If you are in the European Economic Area, the United Kingdom, or another jurisdiction with a comparable data protection law, you have rights regarding personal data we hold about you, including the right to access, correct, or delete that data, and the right to lodge a complaint with your local supervisory authority.</p>
-  <p>Because this site does not collect personal information directly, requests of this nature would typically need to go to the relevant third party (Google AdSense, Google Fonts). For requests relating to anything held by our server, please contact us at the address below.</p>
+  <p>Because this site does not collect personal information directly, requests of this nature would typically need to go to the relevant third party (Google Fonts). For requests relating to anything held by our server, please contact us at the address below.</p>
 
   <h2>Changes to this policy</h2>
   <p>This policy may be updated from time to time to reflect changes in the site, in the services we use, or in applicable law. The "Last updated" date above will reflect any revisions. Continued use of the site after changes means you accept the updated policy.</p>
