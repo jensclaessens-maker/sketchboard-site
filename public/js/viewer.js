@@ -118,19 +118,29 @@ cv.addEventListener('touchmove', e => {
 // ─────────────────────────────────────────
 //  Wheel zoom
 // ─────────────────────────────────────────
+// A horizontal component or a pinch is a sure sign of a trackpad; remember it
+// briefly so plain vertical two-finger scrolls (deltaX 0) still pan, while a
+// real mouse wheel (always purely vertical, never trackpad-flagged) keeps zooming.
+let lastTrackpad = 0;
 cv.addEventListener('wheel', e => {
   e.preventDefault();
-  if (e.ctrlKey) {
-    // Pinch on a trackpad (browsers report it as ctrl+wheel) → zoom at cursor
-    const f  = Math.min(2, Math.max(0.5, Math.exp(-e.deltaY * 0.01)));
+  const now = Date.now();
+  if (e.deltaX !== 0 || e.ctrlKey) lastTrackpad = now;
+  const onTrackpad = now - lastTrackpad < 1500;
+
+  if (!e.ctrlKey && onTrackpad) {
+    // Trackpad two-finger scroll → pan
+    ox -= e.deltaX;
+    oy -= e.deltaY;
+  } else {
+    // Pinch (ctrl+wheel) → smooth zoom; mouse wheel → stepped zoom — both at cursor
+    const f  = e.ctrlKey
+      ? Math.min(2, Math.max(0.5, Math.exp(-e.deltaY * 0.01)))
+      : (e.deltaY < 0 ? 1.1 : 1 / 1.1);
     const r  = cv.getBoundingClientRect();
     const mx = e.clientX - r.left, my = e.clientY - r.top;
     ox = mx - (mx - ox) * f; oy = my - (my - oy) * f;
     sc = Math.min(Math.max(sc * f, MIN_ZOOM), MAX_ZOOM);
-  } else {
-    // Two-finger scroll → pan
-    ox -= e.deltaX;
-    oy -= e.deltaY;
   }
   applyT();
 }, { passive: false });
