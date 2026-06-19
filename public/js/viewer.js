@@ -266,3 +266,25 @@ loadData();
 
 // Poll for updates every 30 s so the public canvas stays fresh
 setInterval(loadData, 30000);
+
+// ─────────────────────────────────────────
+//  Mobile hamburger — toggles the links menu
+// ─────────────────────────────────────────
+const menuBtn     = document.getElementById('menu-btn');
+const headerLinks = document.getElementById('header-links');
+if (menuBtn && headerLinks) {
+  menuBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    headerLinks.classList.toggle('open');
+  });
+  // Close after tapping a link, or when tapping anywhere outside the menu.
+  headerLinks.querySelectorAll('a').forEach(a =>
+    a.addEventListener('click', () => headerLinks.classList.remove('open'))
+  );
+  document.addEventListener('click', e => {
+    if (headerLinks.classList.contains('open') &&
+        !headerLinks.contains(e.target) && e.target !== menuBtn) {
+      headerLinks.classList.remove('open');
+    }
+  });
+}

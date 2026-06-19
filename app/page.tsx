@@ -37,7 +37,7 @@ const CSS = `    @font-face {
       z-index: 90;   /* under #logo (100) and #header-links (100), above the canvas */
     }
     @media (max-width: 800px) {
-      #header-fade { top: 0; height: 88px; }
+      #header-fade { top: 0; height: 70px; }
     }
 
     /* ─── CANVAS ─── */
@@ -132,8 +132,26 @@ const CSS = `    @font-face {
       display: block;
     }
     @media (max-width: 800px) {
-      #header-links { top: 44px; left: 14px; right: auto; height: auto; font-size: 1rem; gap: 16px; }
+      /* Links collapse into the #menu-btn hamburger; shown only when opened */
+      #header-links { display: none; }
+      #header-links.open {
+        display: flex; flex-direction: column; align-items: center;
+        top: auto; right: auto; left: 50%; bottom: 64px;
+        transform: translateX(-50%); height: auto;
+        gap: 16px; padding: 16px 24px; font-size: 1.15rem;
+        background: var(--ui); backdrop-filter: blur(20px);
+        border-radius: 16px; box-shadow: 0 6px 28px rgba(0,0,0,.4);
+      }
+      #header-links.open a { color: #fff; }
       #header-links svg { width: 22px; height: 22px; }
+      #menu-btn {
+        display: flex; align-items: center; justify-content: center;
+        position: fixed; bottom: 12px; left: 50%; transform: translateX(72px);
+        width: 42px; height: 42px; border: none; border-radius: 50%;
+        background: var(--ui); backdrop-filter: blur(20px);
+        color: rgba(255,255,255,.85); font-size: 1.3rem; line-height: 1;
+        cursor: pointer; z-index: 400; box-shadow: 0 4px 24px rgba(0,0,0,.3);
+      }
     }
     @media (max-width: 500px) {
       #header-links { font-size: .9rem; gap: 12px; }
@@ -157,6 +175,9 @@ const CSS = `    @font-face {
     .tbb:hover { background: rgba(255,255,255,.12); color: #fff; }
     .tbb:disabled { opacity: .3; cursor: default; }
     .tbb:disabled:hover { background: transparent; color: rgba(255,255,255,.6); }
+
+    /* Mobile hamburger (its own bubble beside the zoom toolbar; hidden on desktop) */
+    #menu-btn { display: none; }
 
   `;
 
@@ -200,7 +221,9 @@ const BODY = `<div id="header-fade"></div>
   <button class="tbb" id="btn-out">−</button>
   <button class="tbb" id="btn-in">+</button>
   <button class="tbb" id="btn-refresh" title="Jump to a random sketch" style="font-size:1rem">↻</button>
-</div>`;
+</div>
+
+<button id="menu-btn" aria-label="Open menu" title="Menu">☰</button>`;
 
 export default function Page() {
   return (
