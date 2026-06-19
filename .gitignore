@@ -1,5 +1,18 @@
+# dependencies
 node_modules/
-public/images/*
-!public/images/.gitkeep
-data.json
+
+# next.js
+.next/
+next-env.d.ts
+
+# cloudflare / opennext build output + local state
+.open-next/
+.wrangler/
+
+# local secrets (set real values as Worker secrets in production)
+.dev.vars
+.env*.local
+
+# misc
+*.log
 .DS_Store

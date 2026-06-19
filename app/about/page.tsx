@@ -1,20 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="About The Endless Sketchbookery of Jens Claessens — an infinite canvas of sketches.">
-  <title>About — The Endless Sketchbookery of Jens Claessens</title>
+import Script from "next/script";
 
-  <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9316815166015110"
-          crossorigin="anonymous"></script>
+export const metadata = {
+  title: "About — The Endless Sketchbookery of Jens Claessens",
+  description: "About The Endless Sketchbookery of Jens Claessens — an infinite canvas of sketches.",
+};
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+const CSS = `    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root { --bg: #faf1e0; --ink: #12100a; --muted: #6a5e48; --rule: rgba(18,14,8,.12); }
     html, body {
       background: var(--bg); color: var(--ink);
@@ -82,16 +73,14 @@
       header, footer { flex-direction: column; gap: 8px; align-items: flex-start; }
       footer nav a { margin: 0 14px 0 0; }
     }
-  </style>
-</head>
-<body>
+  `;
 
-<header>
+const BODY = `<header>
   <a class="logo" href="/">The Endless Sketchbookery<br>of Jens Claessens</a>
   <nav>
     <a href="/">← Back to canvas</a>
-    <a href="/about.html">About</a>
-    <a href="/privacy.html">Privacy</a>
+    <a href="/about">About</a>
+    <a href="/privacy">Privacy</a>
   </nav>
 </header>
 
@@ -112,19 +101,30 @@
   <p>If you'd like to get in touch, you can reach me at <a href="mailto:jens.claessens@gmail.com">jens.claessens@gmail.com</a>.</p>
 
   <h2>Technical credits</h2>
-  <p>The site runs on a small Node.js server hosted on Render. Images are served directly from the same server. The font is <a href="https://fonts.google.com/specimen/Fraunces" target="_blank" rel="noopener">Fraunces</a> by Undercase Type, paired with <a href="https://fonts.google.com/specimen/Caveat" target="_blank" rel="noopener">Caveat</a> for handwritten accents.</p>
+  <p>The site runs on Cloudflare Workers, with images served from Cloudflare R2 and sketch positions stored in Cloudflare D1. The font is <a href="https://fonts.google.com/specimen/Fraunces" target="_blank" rel="noopener">Fraunces</a> by Undercase Type, paired with <a href="https://fonts.google.com/specimen/Caveat" target="_blank" rel="noopener">Caveat</a> for handwritten accents.</p>
 </main>
 
 <footer>
   <span>© <span id="year">2026</span> Jens Claessens</span>
   <nav>
     <a href="/">Canvas</a>
-    <a href="/about.html">About</a>
-    <a href="/privacy.html">Privacy</a>
+    <a href="/about">About</a>
+    <a href="/privacy">Privacy</a>
   </nav>
-</footer>
+</footer>`;
 
-<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
-
-</body>
-</html>
+export default function Page() {
+  return (
+    <>
+      <style dangerouslySetInnerHTML={{ __html: CSS }} />
+      <Script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9316815166015110"
+        crossOrigin="anonymous"
+        strategy="afterInteractive"
+      />
+      <div dangerouslySetInnerHTML={{ __html: BODY }} />
+      <Script id="year" strategy="afterInteractive">{`document.getElementById('year').textContent = new Date().getFullYear();`}</Script>
+    </>
+  );
+}

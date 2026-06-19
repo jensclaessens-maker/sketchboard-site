@@ -1,0 +1,41 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "sketchboard",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-03-25",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      // Required by OpenNext for self-referencing requests. The `service`
+      // value MUST equal the "name" above.
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "sketchboard"
+    }
+  ],
+  "r2_buckets": [
+    {
+      // Uploaded sketch images live here (free egress, 10 GB free storage).
+      "binding": "IMAGES",
+      "bucket_name": "sketchboard-images"
+    }
+  ],
+  "d1_databases": [
+    {
+      // Sketch positions/titles/z-order live here (SQLite).
+      "binding": "DB",
+      "database_name": "sketchboard-db",
+      "database_id": "b98ae0c2-97e9-498d-92d6-d60206b6573e"
+    }
+  ],
+  // Keep the *.workers.dev URL enabled alongside the custom domains.
+  "workers_dev": true,
+  // Serve the site on the real domain (apex + www) as Custom Domains.
+  "routes": [
+    { "pattern": "jensclaessens.com", "custom_domain": true },
+    { "pattern": "www.jensclaessens.com", "custom_domain": true }
+  ]
+}

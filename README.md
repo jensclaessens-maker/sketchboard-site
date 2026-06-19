@@ -1,63 +1,86 @@
 # Sketchboard
 
-An infinite canvas of your sketches. Two pages, one folder for everything, real image files in a real folder.
+An infinite canvas of sketches. A public canvas anyone can pan/zoom, plus a
+password-protected `/admin` editor to upload, drag, restack, lock, and delete.
+
+Built with **Next.js 15 (App Router)** and deployed to **Cloudflare Workers**
+(free plan) via the [OpenNext](https://opennext.js.org/cloudflare) adapter.
+Images live in **Cloudflare R2**; sketch positions live in **Cloudflare D1**.
+
+> Previously a Node/Express app that stored images and a `data.json` on a
+> persistent disk (which needs a paid host). It was ported to Cloudflare so it
+> can run for **$0** — see [DEPLOY.md](./DEPLOY.md).
+
+## Project layout
 
 ```
-sketchboard/
-├── server.js          ← the Node backend
-├── package.json
-├── data.json          ← positions live here (created on first run)
-└── public/
-    ├── index.html     ← the public canvas (what visitors see)
-    ├── admin.html     ← your editor (password required)
-    └── images/        ← uploaded files end up here
+sketchboard-site/
+├── app/
+│   ├── page.tsx              ← public canvas (/)
+│   ├── admin/page.tsx        ← editor (/admin, password)
+│   ├── about/page.tsx        ← /about
+│   ├── privacy/page.tsx      ← /privacy
+│   ├── api/
+│   │   ├── login/route.ts        POST  password -> token
+│   │   ├── data/route.ts         GET   all sketches (public)
+│   │   ├── stats/route.ts        GET   admin stats (count/files/bytes)
+│   │   ├── upload/route.ts       POST  image -> R2 + D1
+│   │   └── sketches/[id]/route.ts PATCH move/rename/restack/lock · DELETE
+│   ├── images/[file]/route.ts ← serves an image from R2
+│   └── layout.tsx
+├── lib/
+│   ├── auth.ts               ← stateless HMAC bearer-token auth
+│   └── sketches.ts           ← D1 data access
+├── public/js/
+│   ├── viewer.js             ← canvas engine for / (unchanged from original)
+│   └── admin.js              ← canvas engine for /admin (unchanged from original)
+├── schema.sql                ← D1 table
+├── wrangler.jsonc            ← Cloudflare bindings (R2 + D1) + Worker config
+├── open-next.config.ts
+└── next.config.ts
 ```
 
-## Run it
+The pan/zoom/pinch/drag/virtualization logic in `public/js/*.js` is the original
+vanilla-JS engine, preserved verbatim (only change: image URLs are now absolute,
+`/images/...`, so they work on every route).
+
+## Local development
 
 ```bash
-cd sketchboard
 npm install
-npm start
+# one time: create the local test database
+npx wrangler d1 execute sketchboard-db --local --file=./schema.sql
+npm run dev          # http://localhost:3000  (fast, auto-reloads)
+# or:
+npm run preview      # runs in the real Cloudflare Workers runtime
 ```
 
-Open:
-- **http://localhost:3000** — the public canvas (what visitors see)
-- **http://localhost:3000/admin.html** — your editor, asks for a password
-
-## Set your password
-
-The default password is `admin` — **change it before deploying anywhere public.**
-
-Two ways:
-
-1. Edit `server.js` and change the `PASSWORD` constant
-2. Or set an environment variable when starting:
-
-   ```bash
-   SKETCHBOARD_PASSWORD=your-secret npm start
-   ```
-
-## How it works
-
-- **Visitors** hit `/` → they see the canvas, can pan and zoom, can't change anything
-- **You** hit `/admin.html` → log in once, then upload, drag images anywhere (overlap is fine), rename or delete
-- Images are real files in `public/images/`
-- Positions live in `data.json` — server writes to it on every change
-- Images display at their **actual pixel size** (a 2000×1500 photo takes up 2000×1500 px in world space)
+Local login password comes from `.dev.vars` (default `admin`). That file is
+gitignored — production secrets are set in Cloudflare.
 
 ## Deploying
 
-Anywhere that runs Node.js works:
+See **[DEPLOY.md](./DEPLOY.md)** for the full one-time setup. The short version,
+once set up:
 
-- **Railway / Render / Fly.io** — connect your git repo, deploy
-- **Any VPS** — clone, `npm install`, run with PM2 (`pm2 start server.js`)
-- **Glitch / Replit** — paste the project in, hit run
+```bash
+npm run deploy
+```
 
-Don't forget to set `SKETCHBOARD_PASSWORD` as an environment variable in production.
+## How it works
+
+- **Visitors** hit `/` → pan/zoom the canvas, can't change anything. Each visit
+  lands on a random sketch; images load only as they scroll into view.
+- **You** hit `/admin` → log in once, then upload (drag/paste/click), move,
+  reorder, lock, rename, or delete sketches.
+- **Images** are stored in R2 and served at `/images/<file>` with a 1-year
+  immutable cache. **Positions/titles** are rows in D1. **Login** issues a signed
+  token (no server-side session storage).
+- Images display at their **actual pixel size** in world space.
 
 ## AdSense
 
-The viewer page (`index.html`) has slots ready for AdSense. Find the two `<ins class="adsbygoogle">` blocks and replace `ca-pub-YOUR_PUBLISHER_ID` plus the two slot IDs.
-
+The publisher id (`ca-pub-9316815166015110`) is wired into `app/page.tsx`,
+`app/about/page.tsx`, and `app/privacy/page.tsx`. Replace the `YOUR_SLOT_TOP` /
+`YOUR_SLOT_CORNER` placeholders with real slot ids once AdSense approves them.
 The admin page deliberately has no ads.
