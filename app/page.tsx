@@ -118,7 +118,7 @@ const CSS = `    @font-face {
       position: fixed; top: 16px; right: 18px; height: 48px;
       display: flex; align-items: center; gap: 16px;
       font-family: 'Cormorant', serif; font-style: italic; font-weight: 500;
-      font-size: 1.4rem;
+      font-size: 1.55rem;
       z-index: 100;
     }
     #header-links a {
@@ -128,7 +128,7 @@ const CSS = `    @font-face {
     }
     #header-links a:hover { opacity: .55; }
     #header-links svg {
-      width: 21px; height: 21px;
+      width: 23px; height: 23px;
       display: block;
     }
     @media (max-width: 800px) {
