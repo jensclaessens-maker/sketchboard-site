@@ -237,7 +237,7 @@ function buildCard(sk) {
   el.dataset.id    = sk.id;
 
   const img = document.createElement('img');
-  img.src = '/images/' + sk.file;
+  img.src = 'https://img.jensclaessens.com/' + sk.file;
   img.alt = sk.title || '';
   img.loading  = 'lazy';
   img.decoding = 'async';

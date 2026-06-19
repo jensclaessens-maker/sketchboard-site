@@ -175,7 +175,7 @@ function makeEl(sk) {
   el.className = 'sk';
   el.style.cssText = `left:${sk.x}px; top:${sk.y}px; width:${sk.w}px; height:${sk.h}px; z-index:${sk.z || 0};`;
   const img = document.createElement('img');
-  img.src = '/images/' + sk.file;
+  img.src = 'https://img.jensclaessens.com/' + sk.file;
   img.alt = sk.title || '';
   img.loading  = 'lazy';     // browser-level deferral as a second safety net
   img.decoding = 'async';
