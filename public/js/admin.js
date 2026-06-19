@@ -174,9 +174,11 @@ cv.addEventListener('touchmove', e => {
     const mx = (e.touches[0].clientX + e.touches[1].clientX) / 2;
     const my = (e.touches[0].clientY + e.touches[1].clientY) / 2;
     const f  = d / pd;
-    ox = mx - (mx - ox) * f;
-    oy = my - (my - oy) * f;
-    sc = Math.min(Math.max(sc * f, .04), 12);
+    const ns = Math.min(Math.max(sc * f, .04), 12);
+    const ef = ns / sc;
+    ox = mx - (mx - ox) * ef;
+    oy = my - (my - oy) * ef;
+    sc = ns;
     pd = d;
     t0x = mx - ox;
     t0y = my - oy;
@@ -208,16 +210,20 @@ cv.addEventListener('wheel', e => {
       : (e.deltaY < 0 ? 1.1 : 1 / 1.1);
     const r  = cv.getBoundingClientRect();
     const mx = e.clientX - r.left, my = e.clientY - r.top;
-    ox = mx - (mx - ox) * f; oy = my - (my - oy) * f;
-    sc = Math.min(Math.max(sc * f, .04), 12);
+    const ns = Math.min(Math.max(sc * f, .04), 12);
+    const ef = ns / sc;
+    ox = mx - (mx - ox) * ef; oy = my - (my - oy) * ef;
+    sc = ns;
   }
   applyT();
 }, { passive: false });
 
 function zc(f) {
   const mx = cv.clientWidth / 2, my = cv.clientHeight / 2;
-  ox = mx - (mx - ox) * f; oy = my - (my - oy) * f;
-  sc = Math.min(Math.max(sc * f, .04), 12); applyT();
+  const ns = Math.min(Math.max(sc * f, .04), 12);
+  const ef = ns / sc;
+  ox = mx - (mx - ox) * ef; oy = my - (my - oy) * ef;
+  sc = ns; applyT();
 }
 document.getElementById('btn-in' ).addEventListener('click', () => zc(1.25));
 document.getElementById('btn-out').addEventListener('click', () => zc(1 / 1.25));
