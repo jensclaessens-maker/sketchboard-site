@@ -130,6 +130,9 @@ const CSS = `    @font-face {
         border-radius: 16px; box-shadow: 0 6px 28px rgba(0,0,0,.4);
       }
       #header-links.open a { color: #fff; }
+      /* Mobile menu only: show Shop above The Drawing Challenge (which is first
+         in the DOM). Desktop keeps DOM order. */
+      #header-links.open a:nth-child(2) { order: -1; }
       #header-links svg { width: 22px; height: 22px; }
       #menu-btn {
         display: flex; align-items: center; justify-content: center;
