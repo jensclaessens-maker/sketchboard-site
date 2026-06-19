@@ -120,11 +120,19 @@ cv.addEventListener('touchmove', e => {
 // ─────────────────────────────────────────
 cv.addEventListener('wheel', e => {
   e.preventDefault();
-  const f  = e.deltaY < 0 ? 1.1 : 1 / 1.1;
-  const r  = cv.getBoundingClientRect();
-  const mx = e.clientX - r.left, my = e.clientY - r.top;
-  ox = mx - (mx - ox) * f; oy = my - (my - oy) * f;
-  sc = Math.min(Math.max(sc * f, MIN_ZOOM), MAX_ZOOM); applyT();
+  if (e.ctrlKey) {
+    // Pinch on a trackpad (browsers report it as ctrl+wheel) → zoom at cursor
+    const f  = Math.min(2, Math.max(0.5, Math.exp(-e.deltaY * 0.01)));
+    const r  = cv.getBoundingClientRect();
+    const mx = e.clientX - r.left, my = e.clientY - r.top;
+    ox = mx - (mx - ox) * f; oy = my - (my - oy) * f;
+    sc = Math.min(Math.max(sc * f, MIN_ZOOM), MAX_ZOOM);
+  } else {
+    // Two-finger scroll → pan
+    ox -= e.deltaX;
+    oy -= e.deltaY;
+  }
+  applyT();
 }, { passive: false });
 
 function zc(f) {
