@@ -115,6 +115,12 @@ const CSS = `    @font-face {
       width: 23px; height: 23px;
       display: block;
     }
+    /* Social icons share one row. Matters in the mobile column menu (otherwise
+       each icon stacks on its own line); on desktop this is visually identical
+       to the icons being individual flex items (same 16px gaps). */
+    #header-links .socials {
+      display: inline-flex; align-items: center; gap: 16px;
+    }
     /* Hamburger hidden on desktop; the mobile @media below reveals it (must come
        BEFORE the @media so the media rule's display:flex wins on mobile). */
     #menu-btn { display: none; }
@@ -132,7 +138,7 @@ const CSS = `    @font-face {
       #header-links.open a { color: #fff; }
       /* Mobile menu only: show Shop above The Drawing Challenge (which is first
          in the DOM). Desktop keeps DOM order. */
-      #header-links.open a:nth-child(2) { order: -1; }
+      #header-links.open > a:nth-child(2) { order: -1; }
       #header-links svg { width: 22px; height: 22px; }
       #menu-btn {
         display: flex; align-items: center; justify-content: center;
@@ -177,6 +183,7 @@ const BODY = `<div id="header-fade"></div>
   <a href="https://jensclaessens.gumroad.com/" target="_blank" rel="noopener">Shop</a>
   <a href="https://ko-fi.com/jensclaessens/shop" target="_blank" rel="noopener">Mentorships</a>
   <a href="mailto:jens.claessens@gmail.com">Contact</a>
+  <span class="socials">
   <a href="https://www.instagram.com/jensclaessens/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <rect x="3" y="3" width="18" height="18" rx="5"/>
@@ -194,6 +201,7 @@ const BODY = `<div id="header-fade"></div>
       <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43V8.69a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.12z"/>
     </svg>
   </a>
+  </span>
 </nav>
 
 <div id="cv">
