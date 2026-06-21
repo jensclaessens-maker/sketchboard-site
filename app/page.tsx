@@ -1,8 +1,37 @@
 import Script from "next/script";
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, SOCIAL_LINKS } from "../lib/site";
 
+// Title + description inherit the layout defaults (SITE_NAME / SITE_DESCRIPTION);
+// we only pin the canonical here so the apex is the one indexed URL.
 export const metadata = {
-  title: "The Endless Sketchbookery of Jens Claessens",
-  description: "An infinite canvas of sketches.",
+  alternates: { canonical: "/" },
+};
+
+// JSON-LD: ties the site to the artist (Person) and declares the WebSite, so
+// search engines associate jensclaessens.com with Jens Claessens across his
+// profiles (sameAs). Rendered as a <script> — not via the Metadata API.
+const STRUCTURED_DATA = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${SITE_URL}/#person`,
+      name: "Jens Claessens",
+      url: SITE_URL,
+      image: `${SITE_URL}/icon-512.png`,
+      jobTitle: "Artist",
+      sameAs: SOCIAL_LINKS,
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: SITE_NAME,
+      description: SITE_DESCRIPTION,
+      inLanguage: "en",
+      publisher: { "@id": `${SITE_URL}/#person` },
+    },
+  ],
 };
 
 const CSS = `    @font-face {
@@ -222,6 +251,13 @@ export default function Page() {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          // escape `<` so a future value can't break out of the <script>
+          __html: JSON.stringify(STRUCTURED_DATA).replace(/</g, "\\u003c"),
+        }}
+      />
       <div dangerouslySetInnerHTML={{ __html: BODY }} />
       <Script src="/js/viewer.js" strategy="afterInteractive" />
     </>

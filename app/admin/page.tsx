@@ -1,8 +1,11 @@
 import Script from "next/script";
 
 export const metadata = {
-  title: "Admin — The Endless Sketchbookery of Jens Claessens",
+  title: "Admin",
   description: "Manage the canvas.",
+  // The admin UI is private (client-side password gate); keep it out of search
+  // indexes entirely. Also Disallowed in robots.ts.
+  robots: { index: false, follow: false },
 };
 
 const CSS = `    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }

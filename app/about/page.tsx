@@ -1,8 +1,9 @@
 import Script from "next/script";
 
 export const metadata = {
-  title: "About — The Endless Sketchbookery of Jens Claessens",
+  title: "About",
   description: "About The Endless Sketchbookery of Jens Claessens — an infinite canvas of sketches.",
+  alternates: { canonical: "/about" },
 };
 
 const CSS = `    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }

@@ -1,8 +1,9 @@
 import Script from "next/script";
 
 export const metadata = {
-  title: "Privacy Policy — The Endless Sketchbookery of Jens Claessens",
+  title: "Privacy Policy",
   description: "Privacy Policy for The Endless Sketchbookery of Jens Claessens.",
+  alternates: { canonical: "/privacy" },
 };
 
 const CSS = `    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
